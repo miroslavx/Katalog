@@ -1,0 +1,77 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="Katalog.MainPage"
+             BackgroundColor="#D2B48C">
+    <!-- Цвет светлого дерева (Tan) -->
+
+    <!-- Фоновая текстура дерева (раскоментируй, когда добавишь картинку) -->
+    <!-- <Image Source="wood_texture.jpg" Aspect="AspectFill" AbsoluteLayout.LayoutBounds="0,0,1,1" AbsoluteLayout.LayoutFlags="All" /> -->
+
+    <ScrollView>
+        <VerticalStackLayout Padding="20" Spacing="30" VerticalOptions="Center">
+
+            <!-- Заголовок на "кожаной" табличке -->
+            <Frame BackgroundColor="#8B4513" CornerRadius="10" Padding="15" BorderColor="#5C2E0B">
+                <Frame.Shadow>
+                    <Shadow Brush="Black" Offset="5,5" Radius="10" Opacity="0.8"/>
+                </Frame.Shadow>
+                <Label Text="NUTIKAS GARDEROOB" 
+                       TextColor="#FFD700" 
+                       FontAttributes="Bold" 
+                       FontSize="24" 
+                       HorizontalOptions="Center" />
+            </Frame>
+
+            <Label Text="Mida ma täna kannan?" 
+                   TextColor="#4A2511" 
+                   FontAttributes="Bold" 
+                   FontSize="18" 
+                   HorizontalOptions="Center"/>
+
+            <!-- Кнопка 1: Рандом -->
+            <Button Text="🎲 Juhuslik valik (Random)"
+                    BackgroundColor="#A0522D"
+                    TextColor="White"
+                    FontAttributes="Bold"
+                    CornerRadius="8"
+                    HeightRequest="60"
+                    BorderWidth="2"
+                    BorderColor="#5C2E0B"
+                    Clicked="OnRandomClicked"/>
+
+            <!-- Кнопка 2: Пресет -->
+            <Button Text="👔 Ametlik stiil (Formal)"
+                    BackgroundColor="#A0522D"
+                    TextColor="White"
+                    FontAttributes="Bold"
+                    CornerRadius="8"
+                    HeightRequest="60"
+                    BorderWidth="2"
+                    BorderColor="#5C2E0B"
+                    Clicked="OnPresetClicked"/>
+
+            <!-- Кнопка 3: Погода (Пока заглушка) -->
+            <Button Text="☀️ Ilma järgi (Mock Temp +15°C)"
+                    BackgroundColor="#A0522D"
+                    TextColor="White"
+                    FontAttributes="Bold"
+                    CornerRadius="8"
+                    HeightRequest="60"
+                    BorderWidth="2"
+                    BorderColor="#5C2E0B"
+                    Clicked="OnWeatherClicked"/>
+
+            <!-- Кнопка: Открыть шкаф -->
+            <Button Text="🚪 Ava riidekapp"
+                    BackgroundColor="#556B2F"
+                    TextColor="White"
+                    FontAttributes="Bold"
+                    CornerRadius="8"
+                    HeightRequest="60"
+                    Margin="0, 30, 0, 0"
+                    Clicked="OnOpenWardrobeClicked"/>
+
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>
