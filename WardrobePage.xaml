@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="Katalog.WardrobePage"
+             Title="Minu riidekapp"
+             BackgroundColor="#D2B48C">
+
+    <Grid RowDefinitions="*, Auto" Padding="10">
+
+        <!-- Сетка (Grid) с нашими вещами -->
+        <CollectionView x:Name="ClothesList" Grid.Row="0">
+            <CollectionView.ItemsLayout>
+                <GridItemsLayout Orientation="Vertical" Span="2" HorizontalItemSpacing="10" VerticalItemSpacing="10"/>
+            </CollectionView.ItemsLayout>
+
+            <CollectionView.ItemTemplate>
+                <DataTemplate>
+                    <!-- Дизайн "Полароидной" фотографии -->
+                    <Frame BackgroundColor="White" Padding="5" CornerRadius="0" HasShadow="True">
+                        <Frame.Shadow>
+                            <Shadow Brush="Black" Offset="2,2" Radius="3" Opacity="0.5"/>
+                        </Frame.Shadow>
+                        <VerticalStackLayout>
+                            <Image Source="{Binding ImagePath}" Aspect="AspectFill" HeightRequest="150" WidthRequest="150"/>
+                            <Label Text="{Binding Name}" FontAttributes="Bold" TextColor="Black" HorizontalOptions="Center" Margin="0,5,0,0"/>
+                            <Label Text="{Binding Category}" TextColor="Gray" FontSize="12" HorizontalOptions="Center"/>
+                        </VerticalStackLayout>
+                    </Frame>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
+
+        <!-- Кнопка "Добавить" в самом низу -->
+        <Button Grid.Row="1" 
+                Text="➕ Lisa uus" 
+                BackgroundColor="#8B4513" 
+                TextColor="White" 
+                FontAttributes="Bold"
+                HeightRequest="60"
+                CornerRadius="8"
+                Clicked="OnAddNewClicked"
+                Margin="0,10,0,0"/>
+    </Grid>
+</ContentPage>

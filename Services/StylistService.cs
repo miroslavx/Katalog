@@ -1,6 +1,6 @@
-﻿using SmartWardrobe.Models;
+﻿using Katalog.Models;
 
-namespace SmartWardrobe.Services
+namespace Katalog.Services
 {
     public class StylistService
     {
@@ -12,7 +12,6 @@ namespace SmartWardrobe.Services
             _dbService = dbService;
         }
 
-        // 1. Случайный выбор ("Монетка")
         public async Task<List<ClothingItem>> GetRandomOutfitAsync()
         {
             var allItems = await _dbService.GetWardrobeAsync();
@@ -24,7 +23,6 @@ namespace SmartWardrobe.Services
             return new List<ClothingItem> { top, bottom, shoes };
         }
 
-        // 2. Выбор по пресету (например "Официальный")
         public async Task<List<ClothingItem>> GetOutfitByPresetAsync(string preset)
         {
             var items = await _dbService.GetWardrobeAsync();
@@ -35,7 +33,6 @@ namespace SmartWardrobe.Services
             return new List<ClothingItem> { top, bottom };
         }
 
-        // 3. Выбор по базовой температуре (пока без интернета, ручной ввод для теста)
         public async Task<List<ClothingItem>> GetOutfitByTemperatureAsync(int currentTemp)
         {
             var items = await _dbService.GetWardrobeAsync();

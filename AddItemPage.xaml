@@ -1,0 +1,59 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="Katalog.AddItemPage"
+             Title="Uus riideese"
+             BackgroundColor="#D2B48C">
+    <!-- Деревянный фон -->
+
+    <ScrollView>
+        <VerticalStackLayout Padding="20" Spacing="20">
+
+            <!-- Место под фото в виде белой рамки (Полароид) -->
+            <Frame BackgroundColor="White" Padding="10" CornerRadius="0" HasShadow="True" HorizontalOptions="Center">
+                <Frame.Shadow>
+                    <Shadow Brush="Black" Offset="3,3" Radius="5" Opacity="0.5"/>
+                </Frame.Shadow>
+                <Image x:Name="ItemImage" 
+                       Source="dotnet_bot.png" 
+                       WidthRequest="200" 
+                       HeightRequest="200" 
+                       Aspect="AspectFill" />
+            </Frame>
+
+            <Button Text="📷 Tee pilt (Камера)" 
+                    BackgroundColor="#8B4513" 
+                    TextColor="White"
+                    FontAttributes="Bold"
+                    CornerRadius="8"
+                    Clicked="OnTakePhotoClicked"/>
+
+            <Frame BackgroundColor="#FFF8DC" CornerRadius="10" BorderColor="#DEB887" Padding="15">
+                <VerticalStackLayout Spacing="15">
+                    <Label Text="Mis see on?" FontAttributes="Bold" TextColor="#8B4513"/>
+
+                    <Entry x:Name="NameEntry" 
+                           Placeholder="Näiteks: Sinine särk" 
+                           BackgroundColor="White" 
+                           TextColor="Black"/>
+
+                    <Picker x:Name="CategoryPicker" Title="Vali kategooria" BackgroundColor="White" TextColor="Black">
+                        <Picker.Items>
+                            <x:String>Top (Ülemine osa)</x:String>
+                            <x:String>Bottom (Alumine osa)</x:String>
+                            <x:String>Shoes (Jalanõud)</x:String>
+                        </Picker.Items>
+                    </Picker>
+                </VerticalStackLayout>
+            </Frame>
+
+            <Button Text="💾 Salvesta (Сохранить)" 
+                    BackgroundColor="#556B2F" 
+                    TextColor="White"
+                    FontAttributes="Bold"
+                    HeightRequest="60"
+                    CornerRadius="8"
+                    Clicked="OnSaveClicked"/>
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>

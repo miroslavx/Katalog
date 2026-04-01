@@ -24,7 +24,7 @@ public partial class MainPage : ContentPage
 
     private async void OnOpenWardrobeClicked(object sender, EventArgs e)
     {
-        // Переход на страницу со списком одежды
-        // await Navigation.PushAsync(new WardrobePage());
+
+        await Shell.Current.GoToAsync(nameof(WardrobePage));
     }
 }

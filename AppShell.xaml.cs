@@ -1,10 +1,11 @@
-﻿namespace Katalog
+﻿namespace Katalog;
+
+public partial class AppShell : Shell
 {
-    public partial class AppShell : Shell
+    public AppShell()
     {
-        public AppShell()
-        {
-            InitializeComponent();
-        }
+        InitializeComponent();
+        Routing.RegisterRoute(nameof(WardrobePage), typeof(WardrobePage));
+        Routing.RegisterRoute(nameof(AddItemPage), typeof(AddItemPage));
     }
 }

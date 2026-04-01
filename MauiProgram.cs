@@ -1,5 +1,5 @@
 ﻿using Microsoft.Extensions.Logging;
-
+using Katalog.Services;
 namespace Katalog
 {
     public static class MauiProgram
@@ -15,8 +15,15 @@ namespace Katalog
                     fonts.AddFont("OpenSans-Semibold.ttf", "OpenSansSemibold");
                 });
 
+            builder.Services.AddSingleton<DatabaseService>();
+            builder.Services.AddTransient<StylistService>();
+
+            builder.Services.AddTransient<MainPage>();
+            builder.Services.AddTransient<WardrobePage>();
+            builder.Services.AddTransient<AddItemPage>();
+
 #if DEBUG
-    		builder.Logging.AddDebug();
+            builder.Logging.AddDebug();
 #endif
 
             return builder.Build();

@@ -1,6 +1,6 @@
 ﻿using SQLite;
 
-namespace SmartWardrobe.Models
+namespace Katalog.Models
 {
     public class ClothingItem
     {
