@@ -7,7 +7,6 @@
 
     <Grid RowDefinitions="*, Auto">
 
-        <!-- Обернули в Grid, чтобы избежать проблем с Padding -->
         <Grid Grid.Row="0" Padding="15">
             <CollectionView x:Name="ClothesList">
                 <CollectionView.ItemsLayout>
@@ -17,7 +16,7 @@
                 <CollectionView.ItemTemplate>
                     <DataTemplate>
                         <VerticalStackLayout>
-                            <!-- Заменили Frame на Border -->
+
                             <Border Padding="0" 
                                     StrokeShape="RoundRectangle 12" 
                                     Stroke="Transparent" 
@@ -32,9 +31,7 @@
                 </CollectionView.ItemTemplate>
             </CollectionView>
         </Grid>
-
-        <!-- Нижняя панель (тоже меняем Frame на Border для красоты) -->
-            <Border Grid.Row="1" BackgroundColor="#FFFFFF" Padding="15,10,15,20" StrokeThickness="0.5" Stroke="#E5E5EA">
+        <Border Grid.Row="1" BackgroundColor="#FFFFFF" Padding="15,10,15,20" StrokeThickness="0.5" Stroke="#E5E5EA">
                 <Button Text="Lisa uus ese" 
                     ImageSource="icon_add.png"
                     BackgroundColor="#007AFF" 

@@ -40,7 +40,6 @@ public partial class AddItemPage : ContentPage
 
                 if (photo != null)
                 {
-                    // Создаем путь для сохранения фото в скрытой папке телефона
                     string localFilePath = Path.Combine(FileSystem.AppDataDirectory, photo.FileName);
 
                     // Копируем файл из камеры в нашу папку
@@ -72,18 +71,13 @@ public partial class AddItemPage : ContentPage
             return;
         }
 
-        // Создаем объект вещи
         var newItem = new ClothingItem
         {
             Name = NameEntry.Text ?? "Nimetu",
             Category = CategoryPicker.SelectedItem?.ToString() ?? "Muu",
-            ImagePath = _imagePath // Тот самый путь к фото на телефоне
+            ImagePath = _imagePath 
         };
-
-        // Сохраняем в SQLite
         await _dbService.AddItemAsync(newItem);
-
-        // Возвращаемся на предыдущий экран
         await Shell.Current.GoToAsync("..");
     }
 }
