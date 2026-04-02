@@ -9,8 +9,6 @@ public partial class AddItemPage : ContentPage
 {
     private string _imagePath;
     private readonly DatabaseService _dbService;
-
-    // Внедряем базу данных через конструктор
     public AddItemPage(DatabaseService dbService)
     {
         InitializeComponent();
@@ -21,29 +19,48 @@ public partial class AddItemPage : ContentPage
     {
         try
         {
-            // Открываем камеру телефона (или эмулятора)
-            var photo = await MediaPicker.Default.CapturePhotoAsync();
-
-            if (photo != null)
+            // 1. ПРОВЕРЯЕМ И ЗАПРАШИВАЕМ РАЗРЕШЕНИЕ НА КАМЕРУ
+            var status = await Permissions.CheckStatusAsync<Permissions.Camera>();
+            if (status != PermissionStatus.Granted)
             {
-                // Создаем путь для сохранения фото в скрытой папке телефона
-                string localFilePath = Path.Combine(FileSystem.AppDataDirectory, photo.FileName);
+                status = await Permissions.RequestAsync<Permissions.Camera>();
+            }
 
-                // Копируем файл из камеры в нашу папку
-                using Stream sourceStream = await photo.OpenReadAsync();
-                using FileStream localFileStream = File.OpenWrite(localFilePath);
-                await sourceStream.CopyToAsync(localFileStream);
+            // Если юзер нажал "Запретить"
+            if (status != PermissionStatus.Granted)
+            {
+                await DisplayAlert("Viga", "Kaamera luba on vajalik pildi tegemiseks!", "OK");
+                return;
+            }
 
-                // Запоминаем путь для базы данных
-                _imagePath = localFilePath;
+            // 2. ЕСЛИ РАЗРЕШИЛ - ОТКРЫВАЕМ КАМЕРУ
+            if (MediaPicker.Default.IsCaptureSupported)
+            {
+                var photo = await MediaPicker.Default.CapturePhotoAsync();
 
-                // Показываем фото на экране
-                ItemImage.Source = ImageSource.FromFile(localFilePath);
+                if (photo != null)
+                {
+                    // Создаем путь для сохранения фото в скрытой папке телефона
+                    string localFilePath = Path.Combine(FileSystem.AppDataDirectory, photo.FileName);
+
+                    // Копируем файл из камеры в нашу папку
+                    using Stream sourceStream = await photo.OpenReadAsync();
+                    using FileStream localFileStream = File.OpenWrite(localFilePath);
+                    await sourceStream.CopyToAsync(localFileStream);
+
+                    // Запоминаем путь для базы данных
+                    _imagePath = localFilePath;
+                    ItemImage.Source = ImageSource.FromFile(localFilePath);
+                }
+            }
+            else
+            {
+                await DisplayAlert("Viga", "Sinu seade ei toeta kaamerat.", "OK");
             }
         }
         catch (Exception ex)
         {
-            await DisplayAlert("Viga", "Kaamerat ei saanud avada.", "OK");
+            await DisplayAlert("Viga", $"Midagi läks valesti: {ex.Message}", "OK");
         }
     }
 
