@@ -9,9 +9,8 @@ public partial class MainPage : ContentPage
 
     private async void OnRandomClicked(object sender, EventArgs e)
     {
-        await DisplayAlert("Tulemus", "Siin on sinu juhuslik riietus!", "OK");
+        await Shell.Current.GoToAsync(nameof(RandomChoicePage));
     }
-
     private async void OnPresetClicked(object sender, EventArgs e)
     {
         await DisplayAlert("Tulemus", "Ametlik riietus leitud.", "OK");

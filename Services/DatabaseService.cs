@@ -26,5 +26,25 @@ namespace Katalog.Services
             await InitAsync();
             return await _db.Table<ClothingItem>().ToListAsync();
         }
+        // Обновить вещь
+        public async Task<int> UpdateItemAsync(ClothingItem item)
+        {
+            await InitAsync();
+            return await _db.UpdateAsync(item);
+        }
+
+        // Удалить вещь
+        public async Task<int> DeleteItemAsync(ClothingItem item)
+        {
+            await InitAsync();
+            return await _db.DeleteAsync(item);
+        }
+
+        // Получить ОДНУ вещь по её ID
+        public async Task<ClothingItem> GetItemAsync(int id)
+        {
+            await InitAsync();
+            return await _db.Table<ClothingItem>().Where(i => i.Id == id).FirstOrDefaultAsync();
+        }
     }
 }

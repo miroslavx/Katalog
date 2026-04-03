@@ -7,5 +7,7 @@ public partial class AppShell : Shell
         InitializeComponent();
         Routing.RegisterRoute(nameof(WardrobePage), typeof(WardrobePage));
         Routing.RegisterRoute(nameof(AddItemPage), typeof(AddItemPage));
+        Routing.RegisterRoute(nameof(ItemDetailPage), typeof(ItemDetailPage));
+        Routing.RegisterRoute(nameof(RandomChoicePage), typeof(RandomChoicePage));
     }
 }

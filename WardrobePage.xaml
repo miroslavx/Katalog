@@ -7,8 +7,8 @@
 
     <Grid RowDefinitions="*, Auto">
 
-        <Grid Grid.Row="0" Padding="15">
-            <CollectionView x:Name="ClothesList">
+        <ContentView Grid.Row="0" Padding="15">
+            <CollectionView x:Name="ClothesList" SelectionMode="Single" SelectionChanged="OnSelectionChanged">
                 <CollectionView.ItemsLayout>
                     <GridItemsLayout Orientation="Vertical" Span="2" HorizontalItemSpacing="15" VerticalItemSpacing="15"/>
                 </CollectionView.ItemsLayout>
@@ -16,7 +16,6 @@
                 <CollectionView.ItemTemplate>
                     <DataTemplate>
                         <VerticalStackLayout>
-
                             <Border Padding="0" 
                                     StrokeShape="RoundRectangle 12" 
                                     Stroke="Transparent" 
@@ -30,9 +29,10 @@
                     </DataTemplate>
                 </CollectionView.ItemTemplate>
             </CollectionView>
-        </Grid>
+        </ContentView>
+
         <Border Grid.Row="1" BackgroundColor="#FFFFFF" Padding="15,10,15,20" StrokeThickness="0.5" Stroke="#E5E5EA">
-                <Button Text="Lisa uus ese" 
+            <Button Text="Lisa uus ese" 
                     ImageSource="icon_add.png"
                     BackgroundColor="#007AFF" 
                     TextColor="#FFFFFF" 
@@ -40,7 +40,7 @@
                     HeightRequest="50"
                     CornerRadius="10"
                     Clicked="OnAddNewClicked"/>
-            </Border>
+        </Border>
 
-        </Grid>
+    </Grid>
 </ContentPage>

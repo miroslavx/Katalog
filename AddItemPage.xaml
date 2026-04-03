@@ -29,22 +29,16 @@
                            TextColor="#000000"
                            PlaceholderColor="#C7C7CC" />
 
-					<BoxView HeightRequest="1" Color="#E5E5EA" Margin="0,5" />
+                    <BoxView HeightRequest="1" Color="#E5E5EA" Margin="0,5" />
+                    <Label Text="Kategooria" TextColor="#000000" FontAttributes="Bold" FontSize="14"/>
+                    <Picker x:Name="CategoryPicker" Title="Vali peakategooria..." BackgroundColor="Transparent" TextColor="#000000" SelectedIndexChanged="OnCategoryChanged" />
 
-					<Label Text="Kategooria" TextColor="#000000" FontAttributes="Bold" FontSize="14"/>
-					<Picker x:Name="CategoryPicker"
-                            Title="Vali..."
-                            BackgroundColor="Transparent"
-                            TextColor="#000000"
-                            TitleColor="#C7C7CC">
-						<Picker.Items>
-							<x:String>Ülemine osa (Top)</x:String>
-							<x:String>Alumine osa (Bottom)</x:String>
-							<x:String>Jalanõud (Shoes)</x:String>
-						</Picker.Items>
-					</Picker>
+                    <BoxView HeightRequest="1" Color="#E5E5EA" Margin="0,5" />
 
-				</VerticalStackLayout>
+                    <Label Text="Tüüp" TextColor="#000000" FontAttributes="Bold" FontSize="14"/>
+                    <Picker x:Name="SubCategoryPicker" Title="Vali riietuse tüüp..." BackgroundColor="Transparent" TextColor="#000000" IsEnabled="False" />
+
+                </VerticalStackLayout>
 			</Frame>
 			<Button Text="Salvesta"
                     BackgroundColor="#007AFF"

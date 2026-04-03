@@ -1,82 +1,86 @@
 ﻿using Katalog.Models;
 using Katalog.Services;
-using Katalog.Models;
-using Katalog.Services;
 
 namespace Katalog;
 
 public partial class AddItemPage : ContentPage
 {
-    private string _imagePath;
+    private string _imagePath = string.Empty;
     private readonly DatabaseService _dbService;
+
+    // Наш словарь с 20+ типами одежды
+    private readonly Dictionary<string, List<string>> _categories = new()
+    {
+        { "Ülemine osa", new List<string> { "T-särk", "Särk", "Polo", "Kampsun", "Pusa" } },
+        { "Alumine osa", new List<string> { "Teksad", "Püksid", "Lühikesed püksid", "Seelik" } },
+        { "Üleriided", new List<string> { "Jope", "Mantel", "Tagi", "Vest", "Tuulepluus" } },
+        { "Jalanõud", new List<string> { "Tossud", "Kingad", "Saapad", "Sandaalid" } },
+        { "Aksessuaarid", new List<string> { "Lips", "Müts", "Sall", "Vöö", "Kindad" } }
+    };
+
     public AddItemPage(DatabaseService dbService)
     {
         InitializeComponent();
         _dbService = dbService;
+
+        // Заполняем первый список (Главные категории)
+        CategoryPicker.ItemsSource = _categories.Keys.ToList();
+    }
+
+    // Когда юзер выбирает главную категорию (Верх/Низ)
+    private void OnCategoryChanged(object sender, EventArgs e)
+    {
+        var selectedCategory = CategoryPicker.SelectedItem as string;
+        if (!string.IsNullOrEmpty(selectedCategory))
+        {
+            // Обновляем второй список (Подкатегории)
+            SubCategoryPicker.ItemsSource = _categories[selectedCategory];
+            SubCategoryPicker.IsEnabled = true;
+        }
     }
 
     private async void OnTakePhotoClicked(object sender, EventArgs e)
     {
         try
         {
-            // 1. ПРОВЕРЯЕМ И ЗАПРАШИВАЕМ РАЗРЕШЕНИЕ НА КАМЕРУ
             var status = await Permissions.CheckStatusAsync<Permissions.Camera>();
-            if (status != PermissionStatus.Granted)
-            {
-                status = await Permissions.RequestAsync<Permissions.Camera>();
-            }
+            if (status != PermissionStatus.Granted) status = await Permissions.RequestAsync<Permissions.Camera>();
+            if (status != PermissionStatus.Granted) return;
 
-            // Если юзер нажал "Запретить"
-            if (status != PermissionStatus.Granted)
-            {
-                await DisplayAlert("Viga", "Kaamera luba on vajalik pildi tegemiseks!", "OK");
-                return;
-            }
-
-            // 2. ЕСЛИ РАЗРЕШИЛ - ОТКРЫВАЕМ КАМЕРУ
             if (MediaPicker.Default.IsCaptureSupported)
             {
                 var photo = await MediaPicker.Default.CapturePhotoAsync();
-
                 if (photo != null)
                 {
                     string localFilePath = Path.Combine(FileSystem.AppDataDirectory, photo.FileName);
-
-                    // Копируем файл из камеры в нашу папку
                     using Stream sourceStream = await photo.OpenReadAsync();
                     using FileStream localFileStream = File.OpenWrite(localFilePath);
                     await sourceStream.CopyToAsync(localFileStream);
 
-                    // Запоминаем путь для базы данных
                     _imagePath = localFilePath;
                     ItemImage.Source = ImageSource.FromFile(localFilePath);
                 }
             }
-            else
-            {
-                await DisplayAlert("Viga", "Sinu seade ei toeta kaamerat.", "OK");
-            }
         }
-        catch (Exception ex)
-        {
-            await DisplayAlert("Viga", $"Midagi läks valesti: {ex.Message}", "OK");
-        }
+        catch { await DisplayAlert("Viga", "Kaamerat ei saanud avada.", "OK"); }
     }
 
     private async void OnSaveClicked(object sender, EventArgs e)
     {
-        if (string.IsNullOrEmpty(_imagePath))
+        if (string.IsNullOrEmpty(_imagePath) || CategoryPicker.SelectedItem == null || SubCategoryPicker.SelectedItem == null)
         {
-            await DisplayAlert("Oota", "Palun tee enne pilti!", "OK");
+            await DisplayAlert("Oota", "Palun tee pilt ja vali kategooriad!", "OK");
             return;
         }
 
         var newItem = new ClothingItem
         {
-            Name = NameEntry.Text ?? "Nimetu",
-            Category = CategoryPicker.SelectedItem?.ToString() ?? "Muu",
-            ImagePath = _imagePath 
+            Name = string.IsNullOrWhiteSpace(NameEntry.Text) ? "Nimetu" : NameEntry.Text,
+            Category = CategoryPicker.SelectedItem.ToString(),
+            SubCategory = SubCategoryPicker.SelectedItem.ToString(),
+            ImagePath = _imagePath
         };
+
         await _dbService.AddItemAsync(newItem);
         await Shell.Current.GoToAsync("..");
     }

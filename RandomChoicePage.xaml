@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="Katalog.RandomChoicePage"
+             Title="Mündivise"
+             BackgroundColor="#F2F2F7">
+
+    <Grid RowDefinitions="Auto, Auto, *, Auto" Padding="20">
+        <VerticalStackLayout Grid.Row="0" Spacing="5" Margin="0,0,0,20">
+            <Label Text="Raske valik?" FontAttributes="Bold" FontSize="28" TextColor="#000000"/>
+            <Label Text="Vali kapist 2 eset ja las algoritm otsustab." TextColor="#8E8E93" FontSize="14"/>
+        </VerticalStackLayout>
+        <Grid Grid.Row="1" ColumnDefinitions="*, 60, *" HeightRequest="150" Margin="0,0,0,20">
+            <Border x:Name="Item1Border" Grid.Column="0" StrokeShape="RoundRectangle 16" StrokeThickness="3" Stroke="Transparent" BackgroundColor="#E5E5EA" Padding="0">
+                <Grid>
+                    <Label Text="1" TextColor="#C7C7CC" FontSize="24" FontAttributes="Bold" HorizontalOptions="Center" VerticalOptions="Center"/>
+                    <Image x:Name="Item1Image" Aspect="AspectFill" IsVisible="False" />
+                </Grid>
+            </Border>
+
+            <Label x:Name="SpinningArrow" Grid.Column="1" Text="↑" TextColor="#007AFF" FontSize="50" FontAttributes="Bold" HorizontalOptions="Center" VerticalOptions="Center" />
+            <Border x:Name="Item2Border" Grid.Column="2" StrokeShape="RoundRectangle 16" StrokeThickness="3" Stroke="Transparent" BackgroundColor="#E5E5EA" Padding="0">
+                <Grid>
+                    <Label Text="2" TextColor="#C7C7CC" FontSize="24" FontAttributes="Bold" HorizontalOptions="Center" VerticalOptions="Center"/>
+                    <Image x:Name="Item2Image" Aspect="AspectFill" IsVisible="False" />
+                </Grid>
+            </Border>
+        </Grid>
+
+        <ContentView Grid.Row="2">
+            <CollectionView x:Name="ClothesList" SelectionMode="Single" SelectionChanged="OnSelectionChanged">
+                <CollectionView.ItemsLayout>
+                    <GridItemsLayout Orientation="Vertical" Span="3" HorizontalItemSpacing="10" VerticalItemSpacing="10"/>
+                </CollectionView.ItemsLayout>
+                <CollectionView.ItemTemplate>
+                    <DataTemplate>
+                        <Border Padding="0" StrokeShape="RoundRectangle 8" Stroke="Transparent" BackgroundColor="#FFFFFF">
+                            <Image Source="{Binding ImagePath}" Aspect="AspectFill" HeightRequest="100" />
+                        </Border>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+        </ContentView>
+
+        <Button x:Name="SpinButton" Grid.Row="3" Text="Vali minu eest!" BackgroundColor="#007AFF" TextColor="#FFFFFF" FontAttributes="Bold" CornerRadius="12" HeightRequest="54" IsEnabled="False" Clicked="OnSpinClicked" Margin="0,15,0,0"/>
+
+    </Grid>
+</ContentPage>

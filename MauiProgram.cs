@@ -21,6 +21,9 @@ namespace Katalog
             builder.Services.AddTransient<MainPage>();
             builder.Services.AddTransient<WardrobePage>();
             builder.Services.AddTransient<AddItemPage>();
+            builder.Services.AddTransient<ItemDetailPage>();
+            builder.Services.AddTransient<RandomChoicePage>();
+
 
 #if DEBUG
             builder.Logging.AddDebug();

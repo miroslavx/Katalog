@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="Katalog.ItemDetailPage"
+             Title="Info"
+             BackgroundColor="#F2F2F7">
+
+    <ScrollView>
+        <VerticalStackLayout Padding="20" Spacing="20">
+
+            <Border Padding="0" StrokeShape="RoundRectangle 16" Stroke="Transparent" HorizontalOptions="Center">
+                <Image x:Name="ItemImage" WidthRequest="250" HeightRequest="250" Aspect="AspectFill" />
+            </Border>
+
+            <Border BackgroundColor="#FFFFFF" StrokeShape="RoundRectangle 12" Padding="15" Stroke="Transparent">
+                <VerticalStackLayout Spacing="10">
+                    <Label Text="Nimetus" FontSize="12" TextColor="#8E8E93" />
+                    <Entry x:Name="NameEntry" TextColor="#000000" BackgroundColor="Transparent" FontAttributes="Bold" FontSize="18" />
+
+                    <BoxView HeightRequest="1" Color="#E5E5EA" />
+
+                    <Label Text="Tüüp" FontSize="12" TextColor="#8E8E93" />
+                    <Label x:Name="CategoryLabel" TextColor="#000000" FontSize="16" />
+                </VerticalStackLayout>
+            </Border>
+
+            <Button Text="Salvesta muudatused" BackgroundColor="#007AFF" TextColor="#FFFFFF" FontAttributes="Bold" CornerRadius="10" HeightRequest="50" Clicked="OnSaveClicked" />
+            <Button Text="Kustuta ese" BackgroundColor="Transparent" TextColor="#FF3B30" FontAttributes="Bold" CornerRadius="10" HeightRequest="50" BorderColor="#FF3B30" BorderWidth="1" Clicked="OnDeleteClicked" Margin="0,10,0,0" />
+
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>

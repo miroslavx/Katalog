@@ -7,20 +7,14 @@ namespace Katalog;
 public partial class WardrobePage : ContentPage
 {
     private readonly DatabaseService _dbService;
-
-    // Эта коллекция автоматически обновляет экран, когда в ней меняются данные
     public ObservableCollection<ClothingItem> Clothes { get; set; } = new();
 
     public WardrobePage(DatabaseService dbService)
     {
         InitializeComponent();
         _dbService = dbService;
-
-        // Говорим интерфейсу брать данные из этого файла
         ClothesList.ItemsSource = Clothes;
     }
-
-    // Этот метод срабатывает каждый раз, когда мы открываем эту страницу
     protected override async void OnAppearing()
     {
         base.OnAppearing();
@@ -33,13 +27,20 @@ public partial class WardrobePage : ContentPage
         Clothes.Clear();
         foreach (var item in itemsFromDb)
         {
-            Clothes.Add(item); // Добавляем на экран вещи из базы
+            Clothes.Add(item); 
         }
     }
 
     private async void OnAddNewClicked(object sender, EventArgs e)
     {
-        // Переходим на страницу добавления вещи (Камеры)
         await Shell.Current.GoToAsync(nameof(AddItemPage));
+    }
+    private async void OnSelectionChanged(object sender, SelectionChangedEventArgs e)
+    {
+        if (e.CurrentSelection.FirstOrDefault() is ClothingItem selectedItem)
+        {
+            ClothesList.SelectedItem = null;
+            await Shell.Current.GoToAsync($"{nameof(ItemDetailPage)}?ItemId={selectedItem.Id}");
+        }
     }
 }

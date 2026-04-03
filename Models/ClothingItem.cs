@@ -7,15 +7,13 @@ namespace Katalog.Models
         [PrimaryKey, AutoIncrement]
         public int Id { get; set; }
 
-        public string Name { get; set; } // Например: "Любимая синяя рубашка"
+        public string Name { get; set; } = string.Empty;
+        public string Category { get; set; } = string.Empty;    // Верх, Низ, Обувь
+        public string SubCategory { get; set; } = string.Empty; // Конкретно: Футболка, Джинсы и т.д.
 
-        public string Category { get; set; } // Верх, Низ, Обувь (Top, Bottom, Shoes)
-
-        public string PresetType { get; set; } // Casual, Formal, Sport
-
-        public int MinTemp { get; set; } // Например, +15
-        public int MaxTemp { get; set; } // Например, +25
-
-        public string ImagePath { get; set; } // Путь к фото на телефоне
+        public string PresetType { get; set; } = string.Empty;
+        public int MinTemp { get; set; }
+        public int MaxTemp { get; set; }
+        public string ImagePath { get; set; } = string.Empty;
     }
 }
