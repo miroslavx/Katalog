@@ -1,0 +1,60 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="Katalog.StylePage"
+             Title="Vali stiil"
+             BackgroundColor="#F2F2F7">
+
+    <Grid RowDefinitions="Auto, *">
+        
+        <!-- Меню выбора стилей -->
+        <!-- ИСПРАВЛЕНО: HorizontalScrollBarVisibility="Never" -->
+        <ScrollView Grid.Row="0" Orientation="Horizontal" HorizontalScrollBarVisibility="Never">
+            <!-- Перенесли Padding сюда, чтобы всё работало гладко -->
+            <HorizontalStackLayout Spacing="10" Padding="15,20,15,10">
+                <Button Text="👔 Ametlik" BackgroundColor="#007AFF" TextColor="#FFFFFF" CornerRadius="20" HeightRequest="40" Padding="15,0" Clicked="OnStyleClicked" CommandParameter="Ametlik" />
+                <Button Text="🏃 Sportlik" BackgroundColor="#E5E5EA" TextColor="#000000" CornerRadius="20" HeightRequest="40" Padding="15,0" Clicked="OnStyleClicked" CommandParameter="Sportlik" />
+                <Button Text="🎉 Pidu" BackgroundColor="#E5E5EA" TextColor="#000000" CornerRadius="20" HeightRequest="40" Padding="15,0" Clicked="OnStyleClicked" CommandParameter="Pidu" />
+                <Button Text="☕ Igapäevane" BackgroundColor="#E5E5EA" TextColor="#000000" CornerRadius="20" HeightRequest="40" Padding="15,0" Clicked="OnStyleClicked" CommandParameter="Igapäevane" />
+                <Button Text="🌙 Magamiseks" BackgroundColor="#E5E5EA" TextColor="#000000" CornerRadius="20" HeightRequest="40" Padding="15,0" Clicked="OnStyleClicked" CommandParameter="Magamiseks" />
+            </HorizontalStackLayout>
+        </ScrollView>
+
+        <!-- Список сгенерированных комплектов -->
+        <!-- ИСПРАВЛЕНО: Обернули CollectionView в ContentView ради Padding -->
+        <ContentView Grid.Row="1" Padding="15,10,15,20">
+            <CollectionView x:Name="OutfitsList">
+                <CollectionView.ItemTemplate>
+                    <DataTemplate>
+                        <Border BackgroundColor="#FFFFFF" Stroke="Transparent" StrokeShape="RoundRectangle 16" Padding="15" Margin="0,0,0,15">
+                            <VerticalStackLayout Spacing="15">
+                                
+                                <!-- Название сета -->
+                                <Label Text="{Binding Title}" FontAttributes="Bold" FontSize="18" TextColor="#000000" />
+                                
+                                <!-- Фотографии вещей в этом сете -->
+                                <!-- ИСПРАВЛЕНО: HorizontalScrollBarVisibility="Never" -->
+                                <ScrollView Orientation="Horizontal" HorizontalScrollBarVisibility="Never">
+                                    <HorizontalStackLayout BindableLayout.ItemsSource="{Binding Items}" Spacing="15">
+                                        <BindableLayout.ItemTemplate>
+                                            <DataTemplate>
+                                                <VerticalStackLayout Spacing="5">
+                                                    <Border StrokeShape="RoundRectangle 12" Stroke="Transparent" Padding="0">
+                                                        <Image Source="{Binding ImagePath}" Aspect="AspectFill" WidthRequest="100" HeightRequest="100" />
+                                                    </Border>
+                                                    <Label Text="{Binding SubCategory}" TextColor="#8E8E93" FontSize="12" HorizontalOptions="Center" />
+                                                </VerticalStackLayout>
+                                            </DataTemplate>
+                                        </BindableLayout.ItemTemplate>
+                                    </HorizontalStackLayout>
+                                </ScrollView>
+
+                            </VerticalStackLayout>
+                        </Border>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+        </ContentView>
+        
+    </Grid>
+</ContentPage>

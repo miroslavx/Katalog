@@ -13,7 +13,7 @@ public partial class MainPage : ContentPage
     }
     private async void OnPresetClicked(object sender, EventArgs e)
     {
-        await DisplayAlert("Tulemus", "Ametlik riietus leitud.", "OK");
+        await Shell.Current.GoToAsync(nameof(StylePage));
     }
 
     private async void OnWeatherClicked(object sender, EventArgs e)
@@ -26,4 +26,5 @@ public partial class MainPage : ContentPage
 
         await Shell.Current.GoToAsync(nameof(WardrobePage));
     }
+
 }

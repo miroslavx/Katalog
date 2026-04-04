@@ -7,33 +7,28 @@ public partial class AddItemPage : ContentPage
 {
     private string _imagePath = string.Empty;
     private readonly DatabaseService _dbService;
-
-    // Наш словарь с 20+ типами одежды
     private readonly Dictionary<string, List<string>> _categories = new()
-    {
-        { "Ülemine osa", new List<string> { "T-särk", "Särk", "Polo", "Kampsun", "Pusa" } },
-        { "Alumine osa", new List<string> { "Teksad", "Püksid", "Lühikesed püksid", "Seelik" } },
-        { "Üleriided", new List<string> { "Jope", "Mantel", "Tagi", "Vest", "Tuulepluus" } },
-        { "Jalanõud", new List<string> { "Tossud", "Kingad", "Saapad", "Sandaalid" } },
-        { "Aksessuaarid", new List<string> { "Lips", "Müts", "Sall", "Vöö", "Kindad" } }
-    };
+{
+    { "Ülemine osa", new List<string> { "T-särk", "Särk", "Polo", "Kampsun", "Pusa", "Pintsak", "Pidžaama särk" } },
+    { "Alumine osa", new List<string> { "Teksad", "Püksid", "Lühikesed püksid", "Seelik", "Dressipüksid", "Pidžaama püksid" } },
+    { "Üleriided", new List<string> { "Jope", "Mantel", "Tagi", "Vest", "Tuulepluus" } },
+    { "Jalanõud", new List<string> { "Tossud", "Kingad", "Saapad", "Sandaalid", "Sussid" } },
+    { "Aksessuaarid", new List<string> { "Lips", "Müts", "Sall", "Vöö", "Kindad", "Käekell" } }
+};
 
     public AddItemPage(DatabaseService dbService)
     {
         InitializeComponent();
         _dbService = dbService;
 
-        // Заполняем первый список (Главные категории)
         CategoryPicker.ItemsSource = _categories.Keys.ToList();
     }
 
-    // Когда юзер выбирает главную категорию (Верх/Низ)
     private void OnCategoryChanged(object sender, EventArgs e)
     {
         var selectedCategory = CategoryPicker.SelectedItem as string;
         if (!string.IsNullOrEmpty(selectedCategory))
         {
-            // Обновляем второй список (Подкатегории)
             SubCategoryPicker.ItemsSource = _categories[selectedCategory];
             SubCategoryPicker.IsEnabled = true;
         }

@@ -23,13 +23,17 @@ namespace Katalog
             builder.Services.AddTransient<AddItemPage>();
             builder.Services.AddTransient<ItemDetailPage>();
             builder.Services.AddTransient<RandomChoicePage>();
+            builder.Services.AddTransient<StylePage>();
+
 
 
 #if DEBUG
             builder.Logging.AddDebug();
+
 #endif
 
             return builder.Build();
         }
     }
+
 }
