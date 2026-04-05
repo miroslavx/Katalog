@@ -24,6 +24,8 @@ namespace Katalog
             builder.Services.AddTransient<ItemDetailPage>();
             builder.Services.AddTransient<RandomChoicePage>();
             builder.Services.AddTransient<StylePage>();
+            builder.Services.AddSingleton<WeatherService>();
+            builder.Services.AddTransient<WeatherOutfitPage>(); 
 
 
 

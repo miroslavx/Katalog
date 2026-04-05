@@ -11,20 +11,20 @@ public partial class MainPage : ContentPage
     {
         await Shell.Current.GoToAsync(nameof(RandomChoicePage));
     }
+
     private async void OnPresetClicked(object sender, EventArgs e)
     {
         await Shell.Current.GoToAsync(nameof(StylePage));
     }
 
-    private async void OnWeatherClicked(object sender, EventArgs e)
-    {
-        await DisplayAlert("Tulemus", "Õues on +15°C. Pakun kerget jopet.", "OK");
-    }
-
     private async void OnOpenWardrobeClicked(object sender, EventArgs e)
     {
-
         await Shell.Current.GoToAsync(nameof(WardrobePage));
     }
 
+    // ОСТАВИЛИ ТОЛЬКО ОДИН ПРАВИЛЬНЫЙ МЕТОД ПОГОДЫ
+    private async void OnWeatherClicked(object sender, EventArgs e)
+    {
+        await Shell.Current.GoToAsync(nameof(WeatherOutfitPage));
+    }
 }

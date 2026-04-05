@@ -1,54 +1,27 @@
 ﻿using Katalog.Models;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace Katalog.Services
 {
     public class StylistService
     {
         private readonly DatabaseService _dbService;
-        private Random _random = new Random();
 
         public StylistService(DatabaseService dbService)
         {
             _dbService = dbService;
         }
 
-        public async Task<List<ClothingItem>> GetRandomOutfitAsync()
-        {
-            var allItems = await _dbService.GetWardrobeAsync();
-
-            var top = allItems.Where(c => c.Category == "Top").OrderBy(x => _random.Next()).FirstOrDefault();
-            var bottom = allItems.Where(c => c.Category == "Bottom").OrderBy(x => _random.Next()).FirstOrDefault();
-            var shoes = allItems.Where(c => c.Category == "Shoes").OrderBy(x => _random.Next()).FirstOrDefault();
-
-            return new List<ClothingItem> { top, bottom, shoes };
-        }
-
-        public async Task<List<ClothingItem>> GetOutfitByPresetAsync(string preset)
-        {
-            var items = await _dbService.GetWardrobeAsync();
-
-            var top = items.Where(c => c.Category == "Top" && c.PresetType == preset).FirstOrDefault();
-            var bottom = items.Where(c => c.Category == "Bottom" && c.PresetType == preset).FirstOrDefault();
-
-            return new List<ClothingItem> { top, bottom };
-        }
-
-        public async Task<List<ClothingItem>> GetOutfitByTemperatureAsync(int currentTemp)
-        {
-            var items = await _dbService.GetWardrobeAsync();
-
-            var top = items.Where(c => c.Category == "Top" && currentTemp >= c.MinTemp && currentTemp <= c.MaxTemp).FirstOrDefault();
-            var bottom = items.Where(c => c.Category == "Bottom" && currentTemp >= c.MinTemp && currentTemp <= c.MaxTemp).FirstOrDefault();
-
-
-            return new List<ClothingItem> { top, bottom };
-
-        }
-        public async Task<(bool Success, string Message, List<OutfitSet> Outfits)> GenerateOutfitsByStyleAsync(string style)
+        // =========================================================
+        // 1. АЛГОРИТМ: ГЕНЕРАЦИЯ ОДЕЖДЫ ПО СТИЛЮ (ДЛЯ ПРЕСЕТОВ)
+        // =========================================================
+        public async Task<(bool Success, string Message, List<OutfitSet>? Outfits)> GenerateOutfitsByStyleAsync(string style)
         {
             var wardrobe = await _dbService.GetWardrobeAsync();
 
-            // Правила стилей (какие подкатегории допускаются)
             List<string> allowedTops = new();
             List<string> allowedBottoms = new();
             List<string> allowedShoes = new();
@@ -96,6 +69,8 @@ namespace Katalog.Services
             {
                 return (false, $"Sul puuduvad vajalikud riided ({style} stiil). Lisa kappi sobiv ülemine või alumine osa!", null);
             }
+
+            // Собираем до 3 вариантов
             var outfits = new List<OutfitSet>();
             var rand = new Random();
 
@@ -108,21 +83,124 @@ namespace Katalog.Services
             for (int i = 0; i < variations; i++)
             {
                 var currentSet = new List<ClothingItem>
-        {
-            tops[i % tops.Count],       // Обязательно: Верх
-            bottoms[i % bottoms.Count]  // Обязательно: Низ
-        };
+                {
+                    tops[i % tops.Count],       // Обязательно: Верх
+                    bottoms[i % bottoms.Count]  // Обязательно: Низ
+                };
 
-                // Необязательно: Обувь (если есть)
+                // Необязательно: Обувь (если есть, добавляем случайную)
                 if (shoes.Any()) currentSet.Add(shoes[rand.Next(shoes.Count)]);
 
-                // Необязательно: Аксессуар (с вероятностью 50%, чтобы не всегда лепить галстук)
+                // Необязательно: Аксессуар (с вероятностью 50%, чтобы не перегружать лук)
                 if (accs.Any() && rand.Next(2) == 0) currentSet.Add(accs[rand.Next(accs.Count)]);
 
                 outfits.Add(new OutfitSet { Title = $"Stiilne valik {i + 1}", Items = currentSet });
             }
 
             return (true, "Valmis!", outfits);
+        }
+
+        // =========================================================
+        // 2. АЛГОРИТМ: ГЕНЕРАЦИЯ ОДЕЖДЫ ПО ПОГОДЕ (OPENWEATHERMAP)
+        // =========================================================
+        public async Task<(bool Success, string Message, OutfitSet? Outfit)> GenerateOutfitByWeatherAsync(WeatherResponse weather)
+        {
+            var wardrobe = await _dbService.GetWardrobeAsync();
+            var rand = new Random();
+
+            double temp = weather.Main.Temp;
+
+            // Проверяем, есть ли дождь в описании погоды
+            bool isRaining = weather.Weather.Any(w => w.Main.Contains("Rain", StringComparison.OrdinalIgnoreCase) || w.Main.Contains("Drizzle", StringComparison.OrdinalIgnoreCase));
+
+            List<string> allowedTops = new();
+            List<string> allowedBottoms = new();
+            List<string> allowedOuterwear = new();
+            List<string> allowedShoes = new();
+
+            // ПРАВИЛО 1: ЛЕТО (Жара >= 20°C)
+            if (temp >= 20)
+            {
+                allowedTops.AddRange(new[] { "T-särk", "Polo", "Särk" });
+                allowedBottoms.AddRange(new[] { "Lühikesed püksid", "Seelik" });
+                allowedShoes.AddRange(new[] { "Sandaalid", "Tossud" });
+            }
+            // ПРАВИЛО 2: ТЕПЛАЯ ОСЕНЬ / ВЕСНА (10°C - 19°C)
+            else if (temp >= 10 && temp < 20)
+            {
+                allowedTops.AddRange(new[] { "Särk", "T-särk" });
+                allowedBottoms.AddRange(new[] { "Teksad", "Püksid", "Seelik" });
+                allowedOuterwear.AddRange(new[] { "Tagi", "Tuulepluus", "Pusa", "Kampsun" });
+                allowedShoes.AddRange(new[] { "Tossud", "Kingad" });
+            }
+            // ПРАВИЛО 3: ХОЛОДНАЯ ОСЕНЬ / МЯГКАЯ ЗИМА (0°C - 9°C)
+            else if (temp >= 0 && temp < 10)
+            {
+                allowedTops.AddRange(new[] { "Pusa", "Kampsun", "Särk" });
+                allowedBottoms.AddRange(new[] { "Teksad", "Püksid" });
+                allowedOuterwear.AddRange(new[] { "Jope", "Mantel" });
+                allowedShoes.AddRange(new[] { "Saapad", "Tossud" });
+            }
+            // ПРАВИЛО 4: СУРОВАЯ ЗИМА (< 0°C)
+            else
+            {
+                allowedTops.AddRange(new[] { "Kampsun", "Pusa" });
+                allowedBottoms.AddRange(new[] { "Teksad", "Dressipüksid" });
+                allowedOuterwear.AddRange(new[] { "Jope" }); // Строго зимняя куртка
+                allowedShoes.AddRange(new[] { "Saapad" });
+            }
+
+            // ПРАВИЛО 5: ПРОВЕРКА НА ДОЖДЬ (Переопределяет некоторые вещи)
+            if (isRaining)
+            {
+                // Обязательно куртка от дождя (заменяем свитера на куртки)
+                allowedOuterwear.Clear();
+                allowedOuterwear.AddRange(new[] { "Tuulepluus", "Jope", "Mantel", "Tagi" });
+
+                // Никаких сандалий
+                allowedShoes.Remove("Sandaalid");
+                if (!allowedShoes.Any()) allowedShoes.Add("Saapad"); // Запасной вариант
+            }
+
+            // Фильтруем вещи пользователя
+            var tops = wardrobe.Where(x => allowedTops.Contains(x.SubCategory)).ToList();
+            var bottoms = wardrobe.Where(x => allowedBottoms.Contains(x.SubCategory)).ToList();
+            var outerwears = wardrobe.Where(x => allowedOuterwear.Contains(x.SubCategory)).ToList();
+            var shoes = wardrobe.Where(x => allowedShoes.Contains(x.SubCategory)).ToList();
+
+            // Если не хватает базы (верха или низа) - прерываем
+            if (!tops.Any() || !bottoms.Any())
+            {
+                return (false, "Sul pole selle ilma jaoks sobivaid baasriideid (ülemine või alumine osa).", null);
+            }
+
+            // Собираем идеальный комплект
+            var finalItems = new List<ClothingItem>
+            {
+                tops[rand.Next(tops.Count)],
+                bottoms[rand.Next(bottoms.Count)]
+            };
+
+            // Добавляем верхнюю одежду (если холодно или идет дождь)
+            if (outerwears.Any() && (temp < 20 || isRaining))
+            {
+                finalItems.Add(outerwears[rand.Next(outerwears.Count)]);
+            }
+
+            // Добавляем обувь
+            if (shoes.Any())
+            {
+                finalItems.Add(shoes[rand.Next(shoes.Count)]);
+            }
+
+            // Формируем результат с красивым заголовком
+            var outfit = new OutfitSet
+            {
+                Title = $"Soovitus ({Math.Round(temp)}°C{(isRaining ? ", Vihm" : "")})",
+                Items = finalItems
+            };
+
+            return (true, "Edu!", outfit);
         }
     }
 }

@@ -1,0 +1,50 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="Katalog.WeatherOutfitPage"
+             Title="Täna õues"
+             BackgroundColor="#F2F2F7">
+
+    <Grid RowDefinitions="Auto, *">
+
+        <!-- Виджет Погоды -->
+        <Border Grid.Row="0" Margin="15,20,15,10" Padding="20" BackgroundColor="#007AFF" Stroke="Transparent" StrokeShape="RoundRectangle 16">
+            <VerticalStackLayout Spacing="5">
+                <Label x:Name="CityLabel" Text="Laadin asukohta..." TextColor="#FFFFFF" FontSize="16" FontAttributes="Bold" Opacity="0.8"/>
+                <HorizontalStackLayout Spacing="10" VerticalOptions="Center">
+                    <Label x:Name="TempLabel" Text="--°C" TextColor="#FFFFFF" FontSize="48" FontAttributes="Bold"/>
+                    <Label x:Name="DescLabel" Text="Laadin..." TextColor="#FFFFFF" FontSize="18" VerticalOptions="Center" Margin="0,15,0,0"/>
+                </HorizontalStackLayout>
+            </VerticalStackLayout>
+        </Border>
+
+        <!-- Рекомендованная одежда -->
+        <ScrollView Grid.Row="1" Padding="15,10,15,20">
+            <VerticalStackLayout x:Name="OutfitContainer" Spacing="15" IsVisible="False">
+                <Label Text="Soovitatud riietus:" FontAttributes="Bold" FontSize="18" TextColor="#000000" Margin="5,0,0,0" />
+
+                <!-- Полка с вещами -->
+                <Border BackgroundColor="#FFFFFF" Stroke="Transparent" StrokeShape="RoundRectangle 16" Padding="15">
+                    <StackLayout BindableLayout.ItemsSource="{Binding Items}" Orientation="Vertical" Spacing="15" x:Name="OutfitList">
+                        <BindableLayout.ItemTemplate>
+                            <DataTemplate>
+                                <HorizontalStackLayout Spacing="15">
+                                    <Border StrokeShape="RoundRectangle 12" Stroke="Transparent" Padding="0">
+                                        <Image Source="{Binding ImagePath}" Aspect="AspectFill" WidthRequest="80" HeightRequest="80" />
+                                    </Border>
+                                    <VerticalStackLayout VerticalOptions="Center">
+                                        <Label Text="{Binding Name}" FontAttributes="Bold" FontSize="16" TextColor="#000000"/>
+                                        <Label Text="{Binding SubCategory}" TextColor="#8E8E93" FontSize="14"/>
+                                    </VerticalStackLayout>
+                                </HorizontalStackLayout>
+                            </DataTemplate>
+                        </BindableLayout.ItemTemplate>
+                    </StackLayout>
+                </Border>
+            </VerticalStackLayout>
+        </ScrollView>
+
+        <!-- Индикатор загрузки (крутилка) -->
+        <ActivityIndicator x:Name="LoadingSpinner" Grid.Row="1" IsRunning="True" Color="#007AFF" HorizontalOptions="Center" VerticalOptions="Center" />
+    </Grid>
+</ContentPage>
