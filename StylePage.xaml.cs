@@ -1,25 +1,21 @@
 ﻿using Katalog.Models;
 using Katalog.Services;
-using System.Collections.ObjectModel;
 
 namespace Katalog;
 
 public partial class StylePage : ContentPage
 {
     private readonly StylistService _stylistService;
-    public ObservableCollection<OutfitSet> Outfits { get; set; } = new();
 
     public StylePage(StylistService stylistService)
     {
         InitializeComponent();
         _stylistService = stylistService;
-        OutfitsList.ItemsSource = Outfits;
     }
 
     protected override void OnAppearing()
     {
         base.OnAppearing();
-        // При открытии страницы сразу генерируем "Ametlik" (Официальный)
         Generate("Ametlik");
     }
 
@@ -27,18 +23,19 @@ public partial class StylePage : ContentPage
     {
         if (sender is Button btn)
         {
-            // Получаем название стиля из CommandParameter кнопки
-            string style = btn.CommandParameter.ToString();
+            string style = btn.CommandParameter?.ToString() ?? "Ametlik";
             Generate(style);
 
-            // Визуально делаем нажатую кнопку синей, остальные - серыми
-            var parent = btn.Parent as HorizontalStackLayout;
-            foreach (var child in parent.Children)
+            // Перекрашиваем кнопки
+            if (btn.Parent is HorizontalStackLayout parent)
             {
-                if (child is Button otherBtn)
+                foreach (var child in parent.Children)
                 {
-                    otherBtn.BackgroundColor = Color.FromArgb("#E5E5EA");
-                    otherBtn.TextColor = Color.FromArgb("#000000");
+                    if (child is Button otherBtn)
+                    {
+                        otherBtn.BackgroundColor = Color.FromArgb("#E5E5EA");
+                        otherBtn.TextColor = Color.FromArgb("#000000");
+                    }
                 }
             }
             btn.BackgroundColor = Color.FromArgb("#007AFF");
@@ -48,20 +45,20 @@ public partial class StylePage : ContentPage
 
     private async void Generate(string style)
     {
-        Outfits.Clear();
+        // Очищаем экран перед новой генерацией
+        BindableLayout.SetItemsSource(OutfitsList, null);
+
         var result = await _stylistService.GenerateOutfitsByStyleAsync(style);
 
-        if (result.Success)
+        if (result.Success && result.Outfits != null && result.Outfits.Any())
         {
-            foreach (var outfit in result.Outfits)
-            {
-                Outfits.Add(outfit);
-            }
+            // ПРИНУДИТЕЛЬНО РИСУЕМ ОДЕЖДУ (Обход бага Android)
+            BindableLayout.SetItemsSource(OutfitsList, result.Outfits);
         }
         else
         {
-            // Если вещей нет - выводим ошибку алгоритма
-            await DisplayAlert("Vabandust!", result.Message, "Selge");
+            // Если одежды для стиля нет - выводим окно с ошибкой
+            await DisplayAlert("Info", result.Message, "OK");
         }
     }
 }

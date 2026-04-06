@@ -43,7 +43,6 @@ public partial class WeatherOutfitPage : ContentPage
         TempLabel.Text = $"{Math.Round(weather.Main.Temp)}°C";
         DescLabel.Text = weather.Weather.FirstOrDefault()?.Main ?? "Teadmata";
 
-        // 3. Просим алгоритм подобрать одежду
         var result = await _stylistService.GenerateOutfitByWeatherAsync(weather);
 
         if (result.Success && result.Outfit != null)

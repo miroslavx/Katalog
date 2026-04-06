@@ -5,50 +5,63 @@
              Title="Uus ese"
              BackgroundColor="#F2F2F7">
 
-	<ScrollView>
-		<VerticalStackLayout Padding="20" Spacing="25">
-			<Frame BackgroundColor="#E5E5EA" Padding="0" CornerRadius="16" HasShadow="False" BorderColor="Transparent" HorizontalOptions="Center" WidthRequest="220" HeightRequest="220">
-				<Frame.GestureRecognizers>
-					<TapGestureRecognizer Tapped="OnTakePhotoClicked"/>
-				</Frame.GestureRecognizers>
+    <Grid>
+        <ScrollView>
+            <VerticalStackLayout Padding="20" Spacing="25">
 
-				<Grid>
-					<Image Source="icon_camera.png" WidthRequest="40" HeightRequest="40" HorizontalOptions="Center" VerticalOptions="Center" Opacity="0.5" />
-					<Image x:Name="ItemImage" Aspect="AspectFill" />
-				</Grid>
-			</Frame>
+                <Frame BackgroundColor="#E5E5EA" Padding="0" CornerRadius="16" HasShadow="False" BorderColor="Transparent" HorizontalOptions="Center" WidthRequest="220" HeightRequest="220">
+                    <Frame.GestureRecognizers>
+                        <TapGestureRecognizer Tapped="OnShowInstructionClicked"/>
+                    </Frame.GestureRecognizers>
 
-			<Label Text="Vajuta pildile, et avada kaamera" TextColor="#8E8E93" FontSize="12" HorizontalOptions="Center" Margin="0,-15,0,0"/>
-			<Frame BackgroundColor="#FFFFFF" CornerRadius="12" HasShadow="False" Padding="15" BorderColor="Transparent">
-				<VerticalStackLayout Spacing="10">
+                    <Grid>
+                        <Image Source="icon_camera.png" WidthRequest="40" HeightRequest="40" HorizontalOptions="Center" VerticalOptions="Center" Opacity="0.5" />
+                        <Image x:Name="ItemImage" Aspect="AspectFill" />
+                    </Grid>
+                </Frame>
 
-					<Label Text="Nimetus" TextColor="#000000" FontAttributes="Bold" FontSize="14"/>
-					<Entry x:Name="NameEntry"
-                           Placeholder="Näiteks: Sinine särk"
-                           BackgroundColor="Transparent"
-                           TextColor="#000000"
-                           PlaceholderColor="#C7C7CC" />
+                <Label Text="Vajuta pildile, et avada kaamera" TextColor="#8E8E93" FontSize="12" HorizontalOptions="Center" Margin="0,-15,0,0"/>
 
-                    <BoxView HeightRequest="1" Color="#E5E5EA" Margin="0,5" />
-                    <Label Text="Kategooria" TextColor="#000000" FontAttributes="Bold" FontSize="14"/>
-                    <Picker x:Name="CategoryPicker" Title="Vali peakategooria..." BackgroundColor="Transparent" TextColor="#000000" SelectedIndexChanged="OnCategoryChanged" />
+                <Frame BackgroundColor="#FFFFFF" CornerRadius="12" HasShadow="False" Padding="15" BorderColor="Transparent">
+                    <VerticalStackLayout Spacing="10">
+                        <Label Text="Nimetus" TextColor="#000000" FontAttributes="Bold" FontSize="14"/>
+                        <Entry x:Name="NameEntry" Placeholder="Näiteks: Sinine särk" BackgroundColor="Transparent" TextColor="#000000" PlaceholderColor="#C7C7CC" />
 
-                    <BoxView HeightRequest="1" Color="#E5E5EA" Margin="0,5" />
+                        <BoxView HeightRequest="1" Color="#E5E5EA" Margin="0,5" />
 
-                    <Label Text="Tüüp" TextColor="#000000" FontAttributes="Bold" FontSize="14"/>
-                    <Picker x:Name="SubCategoryPicker" Title="Vali riietuse tüüp..." BackgroundColor="Transparent" TextColor="#000000" IsEnabled="False" />
+                        <Label Text="Kategooria" TextColor="#000000" FontAttributes="Bold" FontSize="14"/>
+                        <Picker x:Name="CategoryPicker" Title="Vali peakategooria..." BackgroundColor="Transparent" TextColor="#000000" SelectedIndexChanged="OnCategoryChanged" />
 
+                        <BoxView HeightRequest="1" Color="#E5E5EA" Margin="0,5" />
+
+                        <Label Text="Tüüp" TextColor="#000000" FontAttributes="Bold" FontSize="14"/>
+                        <Picker x:Name="SubCategoryPicker" Title="Vali riietuse tüüp..." BackgroundColor="Transparent" TextColor="#000000" IsEnabled="False" />
+                    </VerticalStackLayout>
+                </Frame>
+
+                <Button Text="Salvesta" BackgroundColor="#007AFF" TextColor="#FFFFFF" FontAttributes="Bold" HeightRequest="50" CornerRadius="10" Margin="0,10,0,0" Clicked="OnSaveClicked"/>
+            </VerticalStackLayout>
+        </ScrollView>
+
+        <Grid x:Name="InstructionOverlay" BackgroundColor="#80000000" IsVisible="False" Padding="20">
+
+            <Border BackgroundColor="#FFFFFF" Stroke="Transparent" StrokeShape="RoundRectangle 16" VerticalOptions="Center" Padding="20">
+                <VerticalStackLayout Spacing="15">
+
+                    <Label Text="Kuidas teha head pilti?" FontAttributes="Bold" FontSize="20" TextColor="#000000" HorizontalOptions="Center" />
+
+                    <Label Text="Pildista esemeid hea valgusega ja ühevärvilisel taustal, et kapp näeks ilus välja." TextColor="#8E8E93" FontSize="14" HorizontalTextAlignment="Center" />
+
+                    <Border StrokeShape="RoundRectangle 8" Stroke="Transparent" Padding="0" BackgroundColor="#F2F2F7" HeightRequest="180">
+                        <Image Source="instruction_photo.png" Aspect="AspectFit" />
+                    </Border>
+
+                    <Button Text="Saan aru, ava kaamera!" BackgroundColor="#007AFF" TextColor="#FFFFFF" FontAttributes="Bold" CornerRadius="10" HeightRequest="50" Clicked="OnProceedToCameraClicked"/>
+
+                    <Button Text="Tühista" BackgroundColor="Transparent" TextColor="#FF3B30" FontAttributes="Bold" Clicked="OnCancelInstructionClicked" />
                 </VerticalStackLayout>
-			</Frame>
-			<Button Text="Salvesta"
-                    BackgroundColor="#007AFF"
-                    TextColor="#FFFFFF"
-                    FontAttributes="Bold"
-                    HeightRequest="50"
-                    CornerRadius="10"
-                    Margin="0,10,0,0"
-                    Clicked="OnSaveClicked"/>
+            </Border>
+        </Grid>
 
-		</VerticalStackLayout>
-	</ScrollView>
+    </Grid>
 </ContentPage>

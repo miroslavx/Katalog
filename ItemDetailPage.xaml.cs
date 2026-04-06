@@ -27,13 +27,33 @@ public partial class ItemDetailPage : ContentPage
         {
             ItemImage.Source = ImageSource.FromFile(_currentItem.ImagePath);
             NameEntry.Text = _currentItem.Name;
-            CategoryLabel.Text = $"{_currentItem.Category} / {_currentItem.SubCategory}";
+
+            CategoryPicker.ItemsSource = CategoryData.Categories.Keys.ToList();
+            CategoryPicker.SelectedItem = _currentItem.Category;
+
+            if (CategoryData.Categories.ContainsKey(_currentItem.Category))
+            {
+                SubCategoryPicker.ItemsSource = CategoryData.Categories[_currentItem.Category];
+                SubCategoryPicker.SelectedItem = _currentItem.SubCategory;
+            }
+        }
+    }
+
+    private void OnCategoryChanged(object sender, EventArgs e)
+    {
+        var selectedCategory = CategoryPicker.SelectedItem as string;
+        if (!string.IsNullOrEmpty(selectedCategory) && CategoryData.Categories.ContainsKey(selectedCategory))
+        {
+            SubCategoryPicker.ItemsSource = CategoryData.Categories[selectedCategory];
         }
     }
 
     private async void OnSaveClicked(object sender, EventArgs e)
     {
         _currentItem.Name = NameEntry.Text;
+        _currentItem.Category = CategoryPicker.SelectedItem?.ToString() ?? _currentItem.Category;
+        _currentItem.SubCategory = SubCategoryPicker.SelectedItem?.ToString() ?? _currentItem.SubCategory;
+
         await _dbService.UpdateItemAsync(_currentItem);
         await Shell.Current.GoToAsync("..");
     }

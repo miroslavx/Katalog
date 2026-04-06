@@ -5,41 +5,50 @@
              Title="Riidekapp"
              BackgroundColor="#FFFFFF">
 
-    <Grid RowDefinitions="*, Auto">
+    <Grid RowDefinitions="Auto, *, Auto">
 
-        <ContentView Grid.Row="0" Padding="15">
-            <CollectionView x:Name="ClothesList" SelectionMode="Single" SelectionChanged="OnSelectionChanged">
-                <CollectionView.ItemsLayout>
-                    <GridItemsLayout Orientation="Vertical" Span="2" HorizontalItemSpacing="15" VerticalItemSpacing="15"/>
-                </CollectionView.ItemsLayout>
+        <Grid Grid.Row="0" ColumnDefinitions="*, *" ColumnSpacing="10" Padding="15,10,15,0" VerticalOptions="Start" ZIndex="1">
+            <Picker x:Name="FilterPicker" Grid.Column="0" Title="Kõik riided" TextColor="#007AFF" FontSize="14" SelectedIndexChanged="OnFilterSortChanged">
+                <Picker.Items>
+                    <x:String>Kõik riided</x:String>
+                    <x:String>Ülemine osa</x:String>
+                    <x:String>Alumine osa</x:String>
+                    <x:String>Üleriided</x:String>
+                    <x:String>Jalanõud</x:String>
+                    <x:String>Aksessuaarid</x:String>
+                    <x:String>Pesu ja sokid</x:String>
+                </Picker.Items>
+            </Picker>
+            <Picker x:Name="SortPicker" Grid.Column="1" Title="Uusimad enne" TextColor="#007AFF" FontSize="14" SelectedIndexChanged="OnFilterSortChanged">
+                <Picker.Items>
+                    <x:String>Uusimad enne</x:String>
+                    <x:String>Vanemad enne</x:String>
+                    <x:String>A-Z (Tüübi järgi)</x:String>
+                    <x:String>Z-A (Tüübi järgi)</x:String>
+                </Picker.Items>
+            </Picker>
+        </Grid>
 
-                <CollectionView.ItemTemplate>
-                    <DataTemplate>
-                        <VerticalStackLayout>
-                            <Border Padding="0" 
-                                    StrokeShape="RoundRectangle 12" 
-                                    Stroke="Transparent" 
-                                    BackgroundColor="#F2F2F7">
-                                <Image Source="{Binding ImagePath}" Aspect="AspectFill" HeightRequest="160" />
-                            </Border>
+        <CollectionView x:Name="ClothesList" Grid.Row="1" Margin="15" SelectionMode="Single" SelectionChanged="OnSelectionChanged">
+            <CollectionView.ItemsLayout>
+                <GridItemsLayout Orientation="Vertical" Span="2" HorizontalItemSpacing="15" VerticalItemSpacing="15"/>
+            </CollectionView.ItemsLayout>
 
-                            <Label Text="{Binding Name}" FontAttributes="Bold" TextColor="#000000" Margin="0,8,0,0" LineBreakMode="TailTruncation" />
-                            <Label Text="{Binding Category}" TextColor="#8E8E93" FontSize="12" />
-                        </VerticalStackLayout>
-                    </DataTemplate>
-                </CollectionView.ItemTemplate>
-            </CollectionView>
-        </ContentView>
+            <CollectionView.ItemTemplate>
+                <DataTemplate>
+                    <VerticalStackLayout>
+                        <Border Padding="0" StrokeShape="RoundRectangle 12" Stroke="Transparent" BackgroundColor="#F2F2F7">
+                            <Image Source="{Binding ImagePath}" Aspect="AspectFill" HeightRequest="160" />
+                        </Border>
+                        <Label Text="{Binding Name}" FontAttributes="Bold" TextColor="#000000" Margin="0,8,0,0" LineBreakMode="TailTruncation" />
+                        <Label Text="{Binding Category}" TextColor="#8E8E93" FontSize="12" />
+                    </VerticalStackLayout>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
 
-        <Border Grid.Row="1" BackgroundColor="#FFFFFF" Padding="15,10,15,20" StrokeThickness="0.5" Stroke="#E5E5EA">
-            <Button Text="Lisa uus ese" 
-                    ImageSource="icon_add.png"
-                    BackgroundColor="#007AFF" 
-                    TextColor="#FFFFFF" 
-                    FontAttributes="Bold"
-                    HeightRequest="50"
-                    CornerRadius="10"
-                    Clicked="OnAddNewClicked"/>
+        <Border Grid.Row="2" BackgroundColor="#FFFFFF" Padding="15,10,15,20" StrokeThickness="0.5" Stroke="#E5E5EA">
+            <Button Text="Lisa uus ese" BackgroundColor="#007AFF" TextColor="#FFFFFF" FontAttributes="Bold" HeightRequest="50" CornerRadius="10" Clicked="OnAddNewClicked"/>
         </Border>
 
     </Grid>

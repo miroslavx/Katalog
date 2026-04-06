@@ -19,11 +19,13 @@
 
                     <BoxView HeightRequest="1" Color="#E5E5EA" />
 
+                    <Label Text="Kategooria" FontSize="12" TextColor="#8E8E93" />
+                    <Picker x:Name="CategoryPicker" TextColor="#000000" Title="Vali..." SelectedIndexChanged="OnCategoryChanged"/>
+
                     <Label Text="Tüüp" FontSize="12" TextColor="#8E8E93" />
-                    <Label x:Name="CategoryLabel" TextColor="#000000" FontSize="16" />
+                    <Picker x:Name="SubCategoryPicker" TextColor="#000000" Title="Vali..."/>
                 </VerticalStackLayout>
             </Border>
-
             <Button Text="Salvesta muudatused" BackgroundColor="#007AFF" TextColor="#FFFFFF" FontAttributes="Bold" CornerRadius="10" HeightRequest="50" Clicked="OnSaveClicked" />
             <Button Text="Kustuta ese" BackgroundColor="Transparent" TextColor="#FF3B30" FontAttributes="Bold" CornerRadius="10" HeightRequest="50" BorderColor="#FF3B30" BorderWidth="1" Clicked="OnDeleteClicked" Margin="0,10,0,0" />
 

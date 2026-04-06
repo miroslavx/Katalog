@@ -7,47 +7,60 @@ public partial class AddItemPage : ContentPage
 {
     private string _imagePath = string.Empty;
     private readonly DatabaseService _dbService;
-    private readonly Dictionary<string, List<string>> _categories = new()
-{
-    { "Ülemine osa", new List<string> { "T-särk", "Särk", "Polo", "Kampsun", "Pusa", "Pintsak", "Pidžaama särk" } },
-    { "Alumine osa", new List<string> { "Teksad", "Püksid", "Lühikesed püksid", "Seelik", "Dressipüksid", "Pidžaama püksid" } },
-    { "Üleriided", new List<string> { "Jope", "Mantel", "Tagi", "Vest", "Tuulepluus" } },
-    { "Jalanõud", new List<string> { "Tossud", "Kingad", "Saapad", "Sandaalid", "Sussid" } },
-    { "Aksessuaarid", new List<string> { "Lips", "Müts", "Sall", "Vöö", "Kindad", "Käekell" } }
-};
 
     public AddItemPage(DatabaseService dbService)
     {
         InitializeComponent();
         _dbService = dbService;
-
-        CategoryPicker.ItemsSource = _categories.Keys.ToList();
+        CategoryPicker.ItemsSource = CategoryData.Categories.Keys.ToList();
     }
 
     private void OnCategoryChanged(object sender, EventArgs e)
     {
         var selectedCategory = CategoryPicker.SelectedItem as string;
-        if (!string.IsNullOrEmpty(selectedCategory))
+        if (!string.IsNullOrEmpty(selectedCategory) && CategoryData.Categories.ContainsKey(selectedCategory))
         {
-            SubCategoryPicker.ItemsSource = _categories[selectedCategory];
+            SubCategoryPicker.ItemsSource = CategoryData.Categories[selectedCategory];
             SubCategoryPicker.IsEnabled = true;
         }
     }
 
-    private async void OnTakePhotoClicked(object sender, EventArgs e)
+    private void OnShowInstructionClicked(object sender, EventArgs e)
     {
+        InstructionOverlay.IsVisible = true;
+    }
+
+    private void OnCancelInstructionClicked(object sender, EventArgs e)
+    {
+        InstructionOverlay.IsVisible = false;
+    }
+
+    private async void OnProceedToCameraClicked(object sender, EventArgs e)
+    {
+        InstructionOverlay.IsVisible = false;
+
         try
         {
             var status = await Permissions.CheckStatusAsync<Permissions.Camera>();
-            if (status != PermissionStatus.Granted) status = await Permissions.RequestAsync<Permissions.Camera>();
-            if (status != PermissionStatus.Granted) return;
+            if (status != PermissionStatus.Granted)
+            {
+                status = await Permissions.RequestAsync<Permissions.Camera>();
+            }
+
+            if (status != PermissionStatus.Granted)
+            {
+                await DisplayAlert("Viga", "Kaamera luba on vajalik pildi tegemiseks!", "OK");
+                return;
+            }
 
             if (MediaPicker.Default.IsCaptureSupported)
             {
                 var photo = await MediaPicker.Default.CapturePhotoAsync();
+
                 if (photo != null)
                 {
                     string localFilePath = Path.Combine(FileSystem.AppDataDirectory, photo.FileName);
+
                     using Stream sourceStream = await photo.OpenReadAsync();
                     using FileStream localFileStream = File.OpenWrite(localFilePath);
                     await sourceStream.CopyToAsync(localFileStream);
@@ -56,8 +69,15 @@ public partial class AddItemPage : ContentPage
                     ItemImage.Source = ImageSource.FromFile(localFilePath);
                 }
             }
+            else
+            {
+                await DisplayAlert("Viga", "Sinu seade ei toeta kaamerat.", "OK");
+            }
         }
-        catch { await DisplayAlert("Viga", "Kaamerat ei saanud avada.", "OK"); }
+        catch (Exception ex)
+        {
+            await DisplayAlert("Viga", $"Kaamerat ei saanud avada: {ex.Message}", "OK");
+        }
     }
 
     private async void OnSaveClicked(object sender, EventArgs e)
@@ -71,8 +91,8 @@ public partial class AddItemPage : ContentPage
         var newItem = new ClothingItem
         {
             Name = string.IsNullOrWhiteSpace(NameEntry.Text) ? "Nimetu" : NameEntry.Text,
-            Category = CategoryPicker.SelectedItem.ToString(),
-            SubCategory = SubCategoryPicker.SelectedItem.ToString(),
+            Category = CategoryPicker.SelectedItem?.ToString() ?? "Muu",
+            SubCategory = SubCategoryPicker.SelectedItem?.ToString() ?? "Muu",
             ImagePath = _imagePath
         };
 
