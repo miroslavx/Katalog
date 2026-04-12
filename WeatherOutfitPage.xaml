@@ -7,7 +7,6 @@
 
     <Grid RowDefinitions="Auto, *">
 
-        <!-- Виджет Погоды -->
         <Border Grid.Row="0" Margin="15,20,15,10" Padding="20" BackgroundColor="#007AFF" Stroke="Transparent" StrokeShape="RoundRectangle 16">
             <VerticalStackLayout Spacing="5">
                 <Label x:Name="CityLabel" Text="Laadin asukohta..." TextColor="#FFFFFF" FontSize="16" FontAttributes="Bold" Opacity="0.8"/>
@@ -18,12 +17,10 @@
             </VerticalStackLayout>
         </Border>
 
-        <!-- Рекомендованная одежда -->
         <ScrollView Grid.Row="1" Padding="15,10,15,20">
             <VerticalStackLayout x:Name="OutfitContainer" Spacing="15" IsVisible="False">
                 <Label Text="Soovitatud riietus:" FontAttributes="Bold" FontSize="18" TextColor="#000000" Margin="5,0,0,0" />
 
-                <!-- Полка с вещами -->
                 <Border BackgroundColor="#FFFFFF" Stroke="Transparent" StrokeShape="RoundRectangle 16" Padding="15">
                     <StackLayout BindableLayout.ItemsSource="{Binding Items}" Orientation="Vertical" Spacing="15" x:Name="OutfitList">
                         <BindableLayout.ItemTemplate>
@@ -44,7 +41,6 @@
             </VerticalStackLayout>
         </ScrollView>
 
-        <!-- Индикатор загрузки (крутилка) -->
         <ActivityIndicator x:Name="LoadingSpinner" Grid.Row="1" IsRunning="True" Color="#007AFF" HorizontalOptions="Center" VerticalOptions="Center" />
     </Grid>
 </ContentPage>

@@ -92,8 +92,6 @@ namespace Katalog.Services
                 if (outerwears.Any()) currentSet.Add(outerwears[rand.Next(outerwears.Count)]);
                 if (shoes.Any()) currentSet.Add(shoes[rand.Next(shoes.Count)]);
                 if (accs.Any() && rand.Next(2) == 0) currentSet.Add(accs[rand.Next(accs.Count)]);
-
-                // ДОБАВЛЯЕМ В СПИСОК
                 outfits.Add(new OutfitSet { Title = $"Variant {i + 1}", Items = currentSet });
             }
 

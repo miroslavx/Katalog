@@ -22,7 +22,6 @@ public partial class MainPage : ContentPage
         await Shell.Current.GoToAsync(nameof(WardrobePage));
     }
 
-    // ОСТАВИЛИ ТОЛЬКО ОДИН ПРАВИЛЬНЫЙ МЕТОД ПОГОДЫ
     private async void OnWeatherClicked(object sender, EventArgs e)
     {
         await Shell.Current.GoToAsync(nameof(WeatherOutfitPage));

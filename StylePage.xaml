@@ -7,7 +7,6 @@
 
 	<Grid RowDefinitions="Auto, *">
 
-		<!-- Меню выбора стилей (Тут теперь правильные кнопки спорта) -->
 		<ScrollView Grid.Row="0" Orientation="Horizontal" HorizontalScrollBarVisibility="Never">
 			<HorizontalStackLayout Spacing="10" Padding="15,20,15,10">
 				<Button Text="👔 Ametlik" BackgroundColor="#007AFF" TextColor="#FFFFFF" CornerRadius="20" HeightRequest="40" Padding="15,0" Clicked="OnStyleClicked" CommandParameter="Ametlik" />
@@ -19,7 +18,6 @@
 			</HorizontalStackLayout>
 		</ScrollView>
 
-		<!-- ЖЕЛЕЗОБЕТОННЫЙ СПИСОК (BindableLayout вместо CollectionView) -->
 		<ScrollView Grid.Row="1" Padding="15,10,15,20">
 			<VerticalStackLayout x:Name="OutfitsList" Spacing="15">
 				<BindableLayout.ItemTemplate>

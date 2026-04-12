@@ -26,7 +26,6 @@ public partial class StylePage : ContentPage
             string style = btn.CommandParameter?.ToString() ?? "Ametlik";
             Generate(style);
 
-            // Перекрашиваем кнопки
             if (btn.Parent is HorizontalStackLayout parent)
             {
                 foreach (var child in parent.Children)
@@ -45,19 +44,16 @@ public partial class StylePage : ContentPage
 
     private async void Generate(string style)
     {
-        // Очищаем экран перед новой генерацией
         BindableLayout.SetItemsSource(OutfitsList, null);
 
         var result = await _stylistService.GenerateOutfitsByStyleAsync(style);
 
         if (result.Success && result.Outfits != null && result.Outfits.Any())
         {
-            // ПРИНУДИТЕЛЬНО РИСУЕМ ОДЕЖДУ (Обход бага Android)
             BindableLayout.SetItemsSource(OutfitsList, result.Outfits);
         }
         else
         {
-            // Если одежды для стиля нет - выводим окно с ошибкой
             await DisplayAlert("Info", result.Message, "OK");
         }
     }
