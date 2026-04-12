@@ -39,8 +39,6 @@
             </Frame>
 
             <Grid RowDefinitions="Auto, Auto" ColumnDefinitions="*, *" RowSpacing="15" ColumnSpacing="15">
-
-                <!-- Карточка 1: Шкаф -->
                 <Frame Grid.Row="0" Grid.Column="0" BackgroundColor="#FFFFFF" CornerRadius="16" HasShadow="False" Padding="20">
                     <Frame.GestureRecognizers>
                         <TapGestureRecognizer Tapped="OnOpenWardrobeClicked"/>
@@ -52,7 +50,6 @@
                     </VerticalStackLayout>
                 </Frame>
 
-                <!-- Карточка 2: Рандом -->
                 <Frame Grid.Row="0" Grid.Column="1" BackgroundColor="#FFFFFF" CornerRadius="16" HasShadow="False" Padding="20">
                     <Frame.GestureRecognizers>
                         <TapGestureRecognizer Tapped="OnRandomClicked"/>
@@ -64,7 +61,6 @@
                     </VerticalStackLayout>
                 </Frame>
 
-                <!-- Карточка 3: Пресет (Стиль) -->
                 <Frame Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" BackgroundColor="#FFFFFF" CornerRadius="16" HasShadow="False" Padding="20">
                     <Frame.GestureRecognizers>
                         <TapGestureRecognizer Tapped="OnPresetClicked"/>
